@@ -11,6 +11,7 @@
 
 class Archiver {
 public:
+    // Здесь происходит архивация файла, в новом виде указаны название файла исходника, алфавит расшифровки, содержимое файла
     void ArchiveFiles(std::string archive_name, std::vector<std::string> input_files) {
         std::ofstream fout(archive_name, std::ios_base::binary);
         std::vector<int> build_bytes;
@@ -160,7 +161,8 @@ public:
 
         fout.close();
     }
-
+    
+    // Здесь файл расшифровывается: достаётся название файла, алфавит, содержимое и выводится в необходимый файл
     void BuildFiles(std::string filename) {
         std::ifstream fin(filename, std::ios_base::binary);
         std::vector<int> build_9_bites;
@@ -210,7 +212,8 @@ public:
             }
         }
     }
-
+    
+    // Пояснение для понятного будущего управления программой
     void PrintInformation() {
         std::cout << "Для работы с программой поддерживаются следующие форматы:" << std::endl;
         std::cout << "archiver -c archive filename1 filename2 ... filenamen --> архивирование файлов с именами "
@@ -232,7 +235,8 @@ private:
     std::vector<int> count_lengths_;
     std::string name_of_file_out_;
     std::string string_output_bites_;
-
+    
+    // Для преобразования из обычного 8-битного алфавита в 9-битный применяем Хафмана, который даёт нам новый алфавит
     std::unordered_map<std::string, std::string> Huffman(std::string filename) {
         std::ifstream fin(filename, std::ios_base::binary);
         std::unordered_map<std::string, std::string> translate;
@@ -343,7 +347,8 @@ private:
         fin.close();
         return answer;
     }
-
+    
+    // Именно здесь происходит перевод информации в выходной файл, поступающей во время работы BuildFiles
     std::vector<int> OutputSymbol(std::vector<int>& vector_bites) {
         std::vector<int> answer;
         for (int letter : vector_bites) {
@@ -395,7 +400,8 @@ private:
 
         return answer;
     }
-
+    
+    // В этой программе делаем перевод из 9-битного зашифрованного алфавита в нормальный 8-битный, функция вызывается из BuildFiles
     void BuildDecodeTree() {
         std::string string_canonical;
         int ind = 0;
@@ -437,7 +443,8 @@ private:
             }
         }
     }
-
+    
+    // Возвращает int-версию вектора нулей и единиц, представляющей собой разобранную строку
     int GetCodeInt(std::vector<int>& bytes) {
         int answer = 0;
         int step = 1;
@@ -449,7 +456,8 @@ private:
 
         return answer;
     }
-
+    
+    // Возвращает строку из нулей и единиц, представляющей собой преобразованный байт символа
     std::string GetCodeStr(int x, unsigned int right_length) {
         std::string answer;
 
@@ -467,7 +475,8 @@ private:
 
         return answer;
     }
-
+    
+    // Возвращает вектор из нулей и единиц, представляющий собой разобранную строку
     std::vector<int> GetBites(std::string input) {
         std::vector<int> answer;
         for (unsigned int i = 0; i < input.length(); i++) {
